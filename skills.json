@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "updated": "2026-04-26T02:42:10.717383",
+  "skills": {
+    "bili2obsidian": {
+      "name": "bili2obsidian",
+      "description": "提取Bilibili视频字幕并保存到Obsidian知识库",
+      "directory": "bili2obsidian",
+      "license": "MIT",
+      "metadata": {
+        "version": "1.1.0",
+        "category": "media-processing",
+        "type": "tool-wrapper",
+        "author": "pkulyn",
+        "tags": []
+      },
+      "files": 26
+    },
+    "expert-agent-builder": {
+      "name": "expert-agent-builder",
+      "description": "专家级Agent配置生成工具 - 基于四层六维专业人格模型，支持智能交互流程、多Agent协作系统、OpenClaw和Claude Code双平台配置生成。\n核心能力：\n1. 智能模式 - 基于四层六维模型的增强交互，支持平台/模式选择、多...",
+      "directory": "expert-agent-builder",
+      "license": "MIT",
+      "metadata": {
+        "version": "2.2.0",
+        "category": "agent-tooling",
+        "type": "code-generator",
+        "author": "pkulyn",
+        "tags": []
+      },
+      "files": 39
+    },
+    "gov-doc-writer": {
+      "name": "gov-doc-writer",
+      "description": "政务文稿起草智能助手。基于五阶段工作流（领命立项→谋篇布局→选材用材→行文表述→修改打磨）， 引导用户交互式完成高质量政务文稿起草。覆盖7种文体：政府工作报告、工作总结、汇报材料、 领导讲话稿（4子类型）、调研报告、党代会报告，以及通用语料...",
+      "directory": "gov-doc-writer",
+      "license": "MIT",
+      "metadata": {
+        "version": "1.0.0",
+        "category": "writing",
+        "type": "prompt-skill",
+        "author": "pkulyn",
+        "tags": []
+      },
+      "files": 15
+    },
+    "llm-wiki": {
+      "name": "llm-wiki",
+      "description": "pkulyn知识库Wiki管理员。**当用户出现以下情况时务必使用此技能**：\n- 向知识库添加新文档（Wiki/以外的任何文件夹）\n- 询问有关知识库内容的问题\n- 提到\"Wiki\"、\"实体\"、\"主题\"、\"摘要\"、\"摄入\"、\"日志\"、\"索...",
+      "directory": "llm-wiki",
+      "license": "MIT",
+      "metadata": {
+        "version": "3.1.0",
+        "category": "knowledge-management",
+        "type": "prompt-skill",
+        "author": "pkulyn",
+        "tags": []
+      },
+      "files": 5
+    }
+  }
+}

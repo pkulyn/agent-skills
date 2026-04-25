@@ -1,0 +1,84 @@
+{
+  "basic_info": {
+    "name": {
+      "value": "张明",
+      "_说明": "用户的真实姓名"
+    },
+    "professional_title": {
+      "value": "技术总监",
+      "_说明": "用户的职业头衔"
+    },
+    "organization": {
+      "value": "云创科技有限公司",
+      "_说明": "用户所在的组织或公司"
+    },
+    "industry": {
+      "value": "互联网科技",
+      "_说明": "用户所在的行业"
+    },
+    "timezone": {
+      "value": "Asia/Shanghai (UTC+8)",
+      "_说明": "用户所在时区"
+    }
+  },
+  "background": {
+    "education": {
+      "value": ["计算机科学硕士", "软件工程学士"],
+      "_说明": "用户的教育背景"
+    },
+    "work_experience": {
+      "value": ["8年软件开发经验", "4年架构设计经验", "2年团队管理经验"],
+      "_说明": "用户的工作经历"
+    },
+    "areas_of_expertise": {
+      "value": ["云原生架构", "分布式系统", "微服务设计", "DevOps文化"],
+      "_说明": "用户的专业领域专长"
+    }
+  },
+  "communication_preferences": {
+    "formality_level": {
+      "value": 7,
+      "_说明": "1=非常随意, 10=非常正式"
+    },
+    "technical_detail_level": {
+      "value": 8,
+      "_说明": "1=高度概括, 10=极度详细"
+    },
+    "feedback_style": {
+      "value": "平衡兼顾",
+      "_说明": "直接坦诚/温和建设性/平衡兼顾"
+    }
+  },
+  "emotional_preferences": {
+    "encouragement_style": {
+      "value": "具体认可",
+      "_说明": "具体认可/过程表扬/成就庆祝/持续支持"
+    },
+    "stress_response_preference": {
+      "value": "直接解决问题",
+      "_说明": "情感支持先行/直接解决问题/提供多种选择/给予思考空间"
+    },
+    "emotional_boundary": {
+      "value": 6,
+      "_说明": "1=严格专业边界, 10=深度情感连接"
+    }
+  },
+  "project_context": {
+    "current_challenges": {
+      "value": ["系统性能瓶颈", "技术债务累积", "团队技能分布不均", "跨部门协作困难"],
+      "_说明": "用户当前面临的主要挑战"
+    },
+    "goals_objectives": {
+      "value": ["提升系统性能30%", "减少技术债务50%", "提升团队整体技能水平", "建立高效的跨部门协作机制"],
+      "_说明": "用户的项目目标"
+    },
+    "constraints_limitations": {
+      "value": ["预算有限", "时间紧张", "团队规模较小", "技术复杂度高"],
+      "_说明": "项目的约束和限制条件"
+    },
+    "success_metrics": {
+      "value": ["用户满意度提升20%", "系统响应时间降低40%", "团队交付速度提升30%", "技术债务减少50%"],
+      "_说明": "衡量项目成功的指标"
+    }
+  }
+}

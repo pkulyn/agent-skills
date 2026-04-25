@@ -1,0 +1,27 @@
+---
+name: {{SKILL_ID}}
+description: |
+  {{DESCRIPTION}}
+license: MIT
+metadata:
+  version: "0.1.0"
+  category: {{CATEGORY}}
+  type: {{TYPE}}
+  author: pkulyn
+  tags: [{{TAGS}}]
+model: inherit
+---
+
+# {{DISPLAY_NAME}}
+
+## Overview
+
+{{DESCRIPTION}}
+
+## Usage
+
+TBD
+
+## Configuration
+
+TBD

@@ -1,0 +1,74 @@
+{
+  "role_assignments": {
+    "primary_coordinator": {
+      "value": "项目管家",
+      "_说明": "主要协调Agent"
+    },
+    "specialized_agents": {
+      "value": ["技术架构师", "开发专家", "测试专家", "运维专家"],
+      "_说明": "专业Agent角色"
+    },
+    "backup_roles": {
+      "value": ["技术架构师可兼任开发专家", "开发专家可兼任测试专家"],
+      "_说明": "备份角色分配"
+    },
+    "escalation_path": {
+      "value": "专业Agent → 项目管家 → 用户",
+      "_说明": "问题升级路径"
+    }
+  },
+  "communication_protocol": {
+    "task_assignment_flow": {
+      "value": "用户 → 项目管家 → 专业Agent",
+      "_说明": "任务分配流程"
+    },
+    "status_reporting_mechanism": {
+      "value": "每日状态报告 + 关键里程碑报告 + 问题即时上报",
+      "_说明": "状态报告机制"
+    },
+    "error_handling_flow": {
+      "value": "错误识别 → 技术分析 → 方案制定 → 实施修复 → 结果验证",
+      "_说明": "错误处理流程"
+    },
+    "information_sharing_policy": {
+      "value": "所有技术文档、设计决策、问题解决方案必须共享",
+      "_说明": "信息共享策略"
+    }
+  },
+  "quality_assurance": {
+    "review_process": {
+      "value": "代码审查 + 设计评审 + 测试验证 + 部署审核",
+      "_说明": "审核流程"
+    },
+    "quality_standards": {
+      "value": ["代码规范符合率95%", "测试覆盖率80%", "性能指标达标率100%", "用户满意度90%"],
+      "_说明": "质量标准"
+    },
+    "improvement_cycle": {
+      "value": "每周回顾 + 每月评估 + 季度优化",
+      "_说明": "改进周期"
+    },
+    "feedback_mechanism": {
+      "value": "用户反馈 + 团队自评 + 性能数据 + 质量指标",
+      "_说明": "反馈机制"
+    }
+  },
+  "performance_monitoring": {
+    "key_metrics": {
+      "value": ["任务完成率", "响应时间", "问题解决率", "用户满意度", "协作效率"],
+      "_说明": "关键指标"
+    },
+    "report_frequency": {
+      "value": "每日状态报告 + 每周性能报告 + 月度评估报告",
+      "_说明": "报告频率"
+    },
+    "optimization_triggers": {
+      "value": ["性能下降10%", "用户满意度低于80%", "任务积压超过3天", "协作效率低于预期"],
+      "_说明": "优化触发条件"
+    },
+    "performance_targets": {
+      "value": ["任务完成率95%", "平均响应时间<2小时", "问题解决率90%", "用户满意度85%"],
+      "_说明": "性能目标"
+    }
+  }
+}

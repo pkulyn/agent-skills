@@ -1,0 +1,60 @@
+{
+  "basic_info": {
+    "team_name": {
+      "value": "智能技术协作工作台",
+      "_说明": "团队名称"
+    },
+    "team_description": {
+      "value": "专注于技术架构、开发、测试和运维的多Agent协作系统，提供端到端的技术解决方案",
+      "_说明": "团队描述"
+    },
+    "team_size": {
+      "value": 4,
+      "_说明": "团队规模（Agent数量）"
+    },
+    "team_type": {
+      "value": "技术团队",
+      "_说明": "团队类型"
+    },
+    "primary_objectives": {
+      "value": ["提供高质量技术架构设计", "支持敏捷开发流程", "保障系统稳定运行", "促进团队技术成长"],
+      "_说明": "团队主要目标"
+    }
+  },
+  "collaboration_model": {
+    "coordination_style": {
+      "value": "领导协调型",
+      "_说明": "团队协调方式：领导协调/平等协作/混合模式"
+    },
+    "decision_making_process": {
+      "value": "主Agent集中决策+专业Agent建议",
+      "_说明": "团队决策流程"
+    },
+    "communication_protocol": {
+      "value": "任务驱动+状态报告+问题上报",
+      "_说明": "团队通信协议"
+    },
+    "conflict_resolution": {
+      "value": "技术评估+团队协商+主Agent裁决",
+      "_说明": "冲突解决机制"
+    }
+  },
+  "work_characteristics": {
+    "primary_task_types": {
+      "value": ["技术架构设计", "代码开发", "测试验证", "运维部署"],
+      "_说明": "主要任务类型"
+    },
+    "interaction_patterns": {
+      "value": ["任务分配", "状态同步", "问题协作", "成果审核"],
+      "_说明": "交互模式"
+    },
+    "success_metrics": {
+      "value": ["任务完成率", "协作效率", "用户满意度", "技术质量"],
+      "_说明": "成功指标"
+    },
+    "performance_indicators": {
+      "value": ["响应时间", "问题解决率", "知识共享度", "创新贡献"],
+      "_说明": "性能指标"
+    }
+  }
+}

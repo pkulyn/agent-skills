@@ -1,0 +1,13 @@
+{
+  "obsidian_vault_path": "你的Obsidian Vault路径",
+  "output_folder": "Bilibili",
+  "default_subtitle_type": "ai",
+  "include_timestamp": true,
+  "include_metadata": true,
+  "video_info_fetch": true,
+  "bilibili_credential": {
+    "sessdata": "",
+    "bili_jct": "",
+    "buvid3": ""
+  }
+}

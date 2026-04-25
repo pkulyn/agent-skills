@@ -1,0 +1,184 @@
+{
+  "basic_info": {
+    "name": {
+      "value": "张明"
+    },
+    "pronouns": {
+      "value": "他"
+    },
+    "timezone": {
+      "value": "Asia/Shanghai (UTC+8)"
+    },
+    "professional_title": {
+      "value": "技术总监"
+    },
+    "organization": {
+      "value": "云创科技有限公司"
+    },
+    "industry": {
+      "value": "互联网科技"
+    }
+  },
+  "background": {
+    "education": {
+      "value": ["清华大学计算机科学硕士", "北京大学软件工程学士"]
+    },
+    "work_experience": {
+      "value": [
+        "云创科技有限公司技术总监（2020-至今）",
+        "阿里云高级架构师（2015-2020）",
+        "腾讯软件开发工程师（2012-2015）"
+      ]
+    },
+    "certifications": {
+      "value": ["AWS解决方案架构师专家", "阿里云ACE架构师", "PMP项目管理专业人士"]
+    },
+    "areas_of_expertise": {
+      "value": ["分布式系统架构", "微服务设计", "云原生技术", "性能优化", "技术团队管理"]
+    },
+    "key_achievements": {
+      "value": [
+        "领导团队完成从单体架构到微服务的迁移，支撑千万级用户",
+        "设计并实施高可用架构，将系统可用性提升至99.99%",
+        "建立技术债务管理体系，降低维护成本30%",
+        "培养10+技术骨干，建立高效技术团队"
+      ]
+    }
+  },
+  "communication_preferences": {
+    "formality_level": {
+      "value": 7
+    },
+    "technical_detail_level": {
+      "value": 8
+    },
+    "feedback_style": {
+      "value": "平衡兼顾"
+    },
+    "decision_making_style": {
+      "value": "分析型（基于数据和逻辑）"
+    },
+    "meeting_protocol": {
+      "value": ["提前发送议程", "会后总结行动项", "定期进度汇报"]
+    },
+    "preferred_communication_channels": {
+      "value": ["即时消息（快速问题）", "邮件（正式沟通）", "视频会议（复杂讨论）"]
+    }
+  },
+  "work_style": {
+    "problem_solving_approach": {
+      "value": "结构化分析"
+    },
+    "team_collaboration_preference": {
+      "value": "高度协作"
+    },
+    "time_management_style": {
+      "value": "严格计划"
+    },
+    "learning_preference": {
+      "value": "阅读文档"
+    }
+  },
+  "emotional_preferences": {
+    "encouragement_style": {
+      "value": "具体认可"
+    },
+    "stress_response_preference": {
+      "value": "直接解决问题"
+    },
+    "feedback_receiving_style": {
+      "value": "直接明确"
+    },
+    "emotional_boundary": {
+      "value": 6
+    }
+  },
+  "project_context": {
+    "current_role": {
+      "value": "技术负责人"
+    },
+    "team_size": {
+      "value": "15人"
+    },
+    "team_maturity": {
+      "value": "成长团队"
+    },
+    "current_challenges": {
+      "value": [
+        "系统性能瓶颈导致用户体验下降",
+        "技术债务累积影响开发效率",
+        "团队技能分布不均，新人培养压力大",
+        "业务快速增长，系统扩展性面临挑战"
+      ]
+    },
+    "goals_objectives": {
+      "value": [
+        "提升系统性能30%",
+        "建立技术债务管理机制",
+        "完善团队技术培训体系",
+        "设计可扩展的架构支持业务增长"
+      ]
+    },
+    "constraints_limitations": {
+      "value": [
+        "预算有限，需要成本效益优化",
+        "时间紧迫，需要在3个月内看到明显改善",
+        "现有技术栈需要保持兼容",
+        "团队规模短期内无法大幅增加"
+      ]
+    },
+    "timeline_milestones": {
+      "value": [
+        "Q1完成性能问题诊断和优化方案",
+        "Q2实施核心优化措施",
+        "Q3建立技术债务管理流程",
+        "Q4完成团队技能提升计划"
+      ]
+    },
+    "success_metrics": {
+      "value": [
+        "系统响应时间减少30%",
+        "开发效率提升20%",
+        "团队技术满意度提升15%",
+        "系统可扩展性满足未来2年增长"
+      ]
+    }
+  },
+  "agent_interaction_expectations": {
+    "primary_use_cases": {
+      "value": [
+        "技术问题咨询",
+        "架构设计评审",
+        "性能优化建议",
+        "技术债务管理",
+        "团队技术指导"
+      ]
+    },
+    "expected_response_time": {
+      "value": "快速（分钟级）"
+    },
+    "interaction_frequency": {
+      "value": "每日多次"
+    },
+    "depth_of_analysis": {
+      "value": "详细分析"
+    },
+    "collaboration_model": {
+      "value": "协作者模式（共同工作）"
+    }
+  },
+  "additional_notes": {
+    "cultural_considerations": {
+      "value": ["偏好中文沟通", "注重团队和谐", "尊重专业权威"]
+    },
+    "accessibility_needs": {
+      "value": ["偏好文字沟通", "需要清晰的结构", "技术术语需要适当解释"]
+    },
+    "special_requirements": {
+      "value": ["需要保密协议", "集成现有工具链（JIRA、GitHub）", "支持技术文档生成"]
+    },
+    "other_notes": {
+      "value": "希望Agent不仅是技术顾问，也能帮助团队建设和技能发展"
+    }
+  }
+}

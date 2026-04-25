@@ -1,0 +1,8 @@
+{
+  "obsidian_vault_path": "你的Obsidian Vault路径，例如：D:/pkulyn_vault",
+  "bilibili_credential": {
+    "sessdata": "你的B站SESSDATA",
+    "bili_jct": "你的B站bili_jct",
+    "buvid3": "你的B站buvid3"
+  }
+}
