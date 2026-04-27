@@ -11,16 +11,23 @@
     python skill-manager.py validate [--fix]     校验frontmatter + 密钥扫描
     python skill-manager.py doctor               一键巡检
     python skill-manager.py archive <ID>         归档废弃skill
+    python skill-manager.py install <ID...>      从远程仓库安装skill
+    python skill-manager.py install --list       列出远程可用skill
 """
 
 import argparse
+import base64
 import json
 import os
 import re
 import subprocess
 import sys
+import zipfile
 from datetime import datetime
+from io import BytesIO
 from pathlib import Path
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 try:
     import yaml
@@ -32,6 +39,7 @@ ROOT_DIR = Path(__file__).parent.resolve()
 SKILLS_DIR = ROOT_DIR / "skills"
 MANIFEST_PATH = ROOT_DIR / "skills.json"
 ARCHIVE_DIR = ROOT_DIR / "archive"
+DEFAULT_REMOTE = "pkulyn/agent-skills"
 TEMPLATE_PATH = ROOT_DIR / "templates" / "SKILL.md.template"
 
 VALID_CATEGORIES = [
@@ -128,7 +136,48 @@ def parse_frontmatter(skill_md_path):
     return fm, body
 
 
-def normalize_version(v):
+def parse_frontmatter_from_text(text):
+    """Parse YAML frontmatter from raw text string (not a file path)."""
+    if not text.startswith("---"):
+        return None, text
+    end = text.find("---", 3)
+    if end == -1:
+        return None, text
+    fm_text = text[3:end].strip()
+    body = text[end + 3:]
+
+    fm = None
+    if HAS_YAML:
+        try:
+            fm = yaml.safe_load(fm_text) or {}
+        except yaml.YAMLError:
+            fm = None
+
+    if fm is None:
+        fm = {}
+        for line in fm_text.split("\n"):
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#") or stripped.startswith(" "):
+                continue
+            if ":" in stripped:
+                key, _, val = stripped.partition(":")
+                key = key.strip()
+                val = val.strip().strip('"').strip("'")
+                if val and val not in ("|", ">"):
+                    fm[key] = val
+
+    if not isinstance(fm, dict):
+        fm = {}
+
+    if "metadata" not in fm or not isinstance(fm.get("metadata"), dict):
+        fm["metadata"] = {}
+
+    meta = fm["metadata"]
+    for field in ("version", "category", "type", "author", "tags"):
+        if field in fm and field not in meta:
+            meta[field] = fm[field]
+
+    return fm, body
     """Normalize version to semver (MAJOR.MINOR.PATCH)."""
     if v is None:
         return "0.1.0"
@@ -726,6 +775,318 @@ def cmd_archive(args):
     return 0
 
 
+# ── Install from remote ────────────────────────────────────────
+
+def _api_request(url, token=None):
+    """Make a GitHub API request and return parsed JSON."""
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "skill-manager"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    req = Request(url, headers=headers)
+    try:
+        with urlopen(req, timeout=30) as resp:
+            body = resp.read().decode("utf-8")
+            if not body:
+                return None
+            return json.loads(body)
+    except HTTPError as e:
+        err_body = ""
+        try:
+            err_body = e.read().decode("utf-8", errors="replace")[:200]
+        except Exception:
+            pass
+        if e.code == 403 and "rate limit" in err_body.lower():
+            print("ERROR: GitHub API rate limit exceeded. Set --token or use 'gh auth token'.")
+        elif e.code == 404:
+            print(f"ERROR: Not found (404): {url}")
+        else:
+            print(f"ERROR: HTTP {e.code} for {url}: {err_body[:80]}")
+        return None
+    except URLError as e:
+        print(f"ERROR: Network error: {e.reason}")
+        return None
+
+
+def _get_gh_token():
+    """Try to get a GitHub token from gh CLI."""
+    try:
+        r = subprocess.run(
+            ["gh", "auth", "token"],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+        )
+        if r.returncode == 0 and r.stdout.strip():
+            return r.stdout.strip()
+    except FileNotFoundError:
+        pass
+    # Also try the portable gh path
+    try:
+        gh_path = os.path.join(os.environ.get("LOCALAPPDATA", ""), "Programs", "gh", "gh.exe")
+        if os.path.exists(gh_path):
+            r = subprocess.run(
+                [gh_path, "auth", "token"],
+                capture_output=True, text=True, encoding="utf-8", errors="replace",
+            )
+            if r.returncode == 0 and r.stdout.strip():
+                return r.stdout.strip()
+    except Exception:
+        pass
+    return None
+
+
+def _download_repo_zip(repo):
+    """Download the repo as a zip archive.
+
+    Strategy order:
+    1. GitHub API (zipball endpoint)
+    2. git archive (remote)
+    3. Shallow clone + local zip
+    """
+    token = _get_gh_token()
+
+    # 1. Try GitHub API zipball
+    url = f"https://api.github.com/repos/{repo}/zipball/master"
+    headers = {"User-Agent": "skill-manager", "Accept": "application/vnd.github+json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    req = Request(url, headers=headers)
+    try:
+        with urlopen(req, timeout=60) as resp:
+            data = resp.read()
+            if len(data) > 100:
+                return BytesIO(data)
+    except (HTTPError, URLError, OSError):
+        pass
+
+    # 2. Try git archive
+    try:
+        result = subprocess.run(
+            ["git", "archive", "--format=zip", f"--remote=https://github.com/{repo}.git", "HEAD"],
+            capture_output=True, timeout=60,
+        )
+        if result.returncode == 0 and len(result.stdout) > 100:
+            return BytesIO(result.stdout)
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
+
+    # 3. Shallow clone + zip
+    import tempfile
+    tmp_dir = tempfile.mkdtemp(prefix="skill-mgr-")
+    try:
+        r = subprocess.run(
+            ["git", "clone", "--depth=1", f"https://github.com/{repo}.git", tmp_dir],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120,
+        )
+        if r.returncode == 0:
+            buf = BytesIO()
+            import zipfile as zf_mod
+            skills_src = Path(tmp_dir) / "skills"
+            if skills_src.exists():
+                with zf_mod.ZipFile(buf, "w", zf_mod.ZIP_DEFLATED) as zf:
+                    for fpath in skills_src.rglob("*"):
+                        if fpath.is_file() and ".git" not in fpath.parts:
+                            arcname = str(fpath.relative_to(tmp_dir))
+                            zf.write(fpath, arcname)
+                buf.seek(0)
+                return buf
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
+    finally:
+        import shutil
+        if os.path.exists(tmp_dir):
+            shutil.rmtree(tmp_dir, ignore_errors=True)
+
+    print("ERROR: Could not download repo (API, git archive, and clone all failed)")
+    print("  - If behind a corporate proxy, try: python skill-manager.py install <id> --source /path/to/local/repo")
+    return None
+
+
+def _extract_skill_from_zip(zip_bytes, skill_id, dest_dir):
+    """Extract a specific skill directory from the repo zip."""
+    with zipfile.ZipFile(zip_bytes) as zf:
+        names = zf.namelist()
+
+        # Determine path prefix: GitHub format has "owner-repo-hash/" prefix, our format has "skills/"
+        skill_prefix = None
+        for name in names:
+            # GitHub archive format: "pkulyn-agent-skills-abc1234/skills/skill-id/..."
+            if f"/skills/{skill_id}/" in name:
+                idx = name.index(f"/skills/{skill_id}/")
+                skill_prefix = name[:idx + len(f"/skills/{skill_id}/")]
+                break
+            # Our shallow-clone format: "skills/skill-id/..."
+            if name.startswith(f"skills/{skill_id}/"):
+                skill_prefix = f"skills/{skill_id}/"
+                break
+
+        if skill_prefix is None:
+            return False
+
+        extracted = 0
+        for name in names:
+            if name.startswith(skill_prefix) and not name.endswith("/"):
+                under_skill = name[len(skill_prefix):]
+                if not under_skill:
+                    continue
+                target_path = dest_dir / under_skill
+                target_path.parent.mkdir(parents=True, exist_ok=True)
+                with zf.open(name) as src, open(target_path, "wb") as dst:
+                    dst.write(src.read())
+                extracted += 1
+        return extracted > 0
+
+
+def _install_from_local(source_path, skill_ids, dest_dir, force=False):
+    """Install skills from a local repo or directory."""
+    source = Path(source_path).resolve()
+    skills_src = source / "skills" if (source / "skills").exists() else source
+
+    if not skills_src.exists():
+        print(f"ERROR: Source directory not found: {source}")
+        return 1
+
+    installed = []
+    skipped = []
+
+    for sid in skill_ids:
+        src_skill = skills_src / sid
+        target = dest_dir / sid
+
+        if not src_skill.exists() or not (src_skill / "SKILL.md").exists():
+            print(f"  [NOT FOUND] {sid} (no skills/{sid}/SKILL.md in source)")
+            skipped.append(sid)
+            continue
+
+        if target.exists() and not force:
+            print(f"  [SKIP] {sid} (already exists, use --force to overwrite)")
+            skipped.append(sid)
+            continue
+
+        import shutil
+        if target.exists() and force:
+            shutil.rmtree(target)
+
+        shutil.copytree(str(src_skill), str(target), ignore=shutil.ignore_patterns(".git"))
+        installed.append(sid)
+        print(f"  [OK] {sid}")
+
+    return installed, skipped
+
+
+def cmd_install(args):
+    """Install one or more skills from a remote repository or local source."""
+    repo = args.repo or DEFAULT_REMOTE
+    skill_ids = args.skill_ids
+    dest = Path(args.dest) if args.dest else SKILLS_DIR
+    token = args.token or _get_gh_token()
+
+    # --list: list available skills
+    if args.list_remote:
+        source = args.source
+        if source:
+            # List from local source
+            src_path = Path(source).resolve()
+            skills_src = src_path / "skills" if (src_path / "skills").exists() else src_path
+            if not skills_src.exists():
+                print(f"ERROR: Source directory not found: {source}")
+                return 1
+            print(f"\nAvailable skills in {source}:")
+            print(f"{'NAME':<28} {'DESCRIPTION'}")
+            print("-" * 60)
+            for entry in sorted(skills_src.iterdir()):
+                if entry.is_dir() and (entry / "SKILL.md").exists():
+                    fm, _ = parse_frontmatter(entry / "SKILL.md")
+                    desc = fm.get("description", "")[:50] if fm else ""
+                    print(f"  {entry.name:<26} {desc}")
+            return 0
+
+        # List from remote
+        print(f"Fetching available skills from {repo}...")
+        zip_bytes = _download_repo_zip(repo)
+        if zip_bytes is None:
+            print("  Tip: Use --source /path/to/local/repo to list from a local clone")
+            return 1
+
+        with zipfile.ZipFile(zip_bytes) as zf:
+            names = zf.namelist()
+            skill_dirs = set()
+            for name in names:
+                for pattern in ["skills/", "/skills/"]:
+                    idx = name.find(pattern)
+                    if idx >= 0:
+                        rest = name[idx + len(pattern):]
+                        slash = rest.find("/")
+                        if slash > 0:
+                            skill_dirs.add(rest[:slash])
+
+        if not skill_dirs:
+            print("No skills found in remote repository.")
+            return 1
+
+        print(f"\nAvailable skills in {repo}:")
+        print(f"{'NAME':<28} {'DESCRIPTION'}")
+        print("-" * 60)
+        for name in sorted(skill_dirs):
+            print(f"  {name}")
+        return 0
+
+    if not skill_ids:
+        print("ERROR: Specify skill IDs to install, or use --list to see available skills.")
+        return 1
+
+    dest.mkdir(parents=True, exist_ok=True)
+
+    # Install from local source
+    if args.source:
+        print(f"Installing from local source: {args.source}")
+        installed, skipped = _install_from_local(args.source, skill_ids, dest, force=args.force)
+    else:
+        # Install from remote
+        print(f"Downloading {repo}...")
+        zip_bytes = _download_repo_zip(repo)
+        if zip_bytes is None:
+            print("  Tip: Use --source /path/to/local/repo to install from a local clone")
+            return 1
+
+        installed = []
+        skipped = []
+
+        for sid in skill_ids:
+            target = dest / sid
+            if target.exists() and not args.force:
+                print(f"  [SKIP] {sid} (already exists, use --force to overwrite)")
+                skipped.append(sid)
+                continue
+
+            if target.exists() and args.force:
+                import shutil
+                shutil.rmtree(target)
+
+            print(f"  Installing {sid}...", end=" ")
+            if _extract_skill_from_zip(zip_bytes, sid, target):
+                installed.append(sid)
+                print("[OK]")
+            else:
+                print("[NOT FOUND]")
+                if target.exists() and not any(target.iterdir()):
+                    target.rmdir()
+                skipped.append(sid)
+
+    if installed:
+        print(f"\nInstalled {len(installed)} skill(s): {', '.join(installed)}")
+        print(f"  Destination: {dest}")
+        # Sync if installing into local skills dir
+        if dest.resolve() == SKILLS_DIR.resolve():
+            manifest = load_manifest()
+            skills = discover_skills()
+            manifest["skills"] = skills
+            save_manifest(manifest)
+
+    if skipped:
+        print(f"Skipped: {', '.join(skipped)}")
+
+    return 0 if installed else 1
+
+
 # ── Main ──────────────────────────────────────────────────────
 
 def main():
@@ -774,6 +1135,16 @@ def main():
     p_archive = subparsers.add_parser("archive", help="归档废弃skill")
     p_archive.add_argument("skill_id", help="Skill ID")
 
+    # install
+    p_install = subparsers.add_parser("install", help="从远程仓库安装skill")
+    p_install.add_argument("skill_ids", nargs="*", help="要安装的skill ID（支持多个）")
+    p_install.add_argument("--repo", default=DEFAULT_REMOTE, help=f"远程仓库 (默认: {DEFAULT_REMOTE})")
+    p_install.add_argument("--dest", help="安装目标目录 (默认: skills/)")
+    p_install.add_argument("--force", action="store_true", help="覆盖已存在的skill")
+    p_install.add_argument("--list", dest="list_remote", action="store_true", help="列出远程可用skill")
+    p_install.add_argument("--source", help="从本地仓库路径安装 (绕过网络下载)")
+    p_install.add_argument("--token", help="GitHub API token (默认从gh auth获取)")
+
     args = parser.parse_args()
 
     commands = {
@@ -786,6 +1157,7 @@ def main():
         "validate": cmd_validate,
         "doctor": cmd_doctor,
         "archive": cmd_archive,
+        "install": cmd_install,
     }
 
     if args.command in commands:
