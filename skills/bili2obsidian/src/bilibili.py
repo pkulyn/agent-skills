@@ -76,6 +76,33 @@ class BilibiliClient:
         self.credential = credential
 
     @staticmethod
+    def _extract_title_entities(title: str) -> List[str]:
+        """从视频标题中提取实体标签
+
+        规则：
+        1. 提取英文单词（含连字符，如ChatGPT、AI-Agent），去重取前2个
+        2. 英文单词需>=2字符，排除常见停用词
+        """
+        if not title:
+            return []
+
+        stopwords = {'the', 'of', 'in', 'on', 'at', 'to', 'for', 'and', 'or',
+                      'is', 'it', 'no', 'by', 'vs', 'up', 'an', 'a', 'my'}
+
+        # 提取英文单词/短语（含连字符的复合词如GPT-4、TypeScript）
+        words = re.findall(r'[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9]|[A-Za-z]', title)
+
+        seen = set()
+        entities = []
+        for w in words:
+            w_lower = w.lower()
+            if len(w) >= 2 and w_lower not in stopwords and w_lower not in seen:
+                seen.add(w_lower)
+                entities.append(w)
+
+        return entities[:2]
+
+    @staticmethod
     def extract_bvid(url: str) -> Optional[str]:
         """
         从URL中提取BV号
@@ -325,9 +352,24 @@ class BilibiliClient:
         up_name = info.get('owner', {}).get('name', '')
         up_id = info.get('owner', {}).get('mid', 0)
 
-        # 获取标签
-        tags = info.get('dynamic', '').split('#') if info.get('dynamic') else []
-        tags = [t.strip() for t in tags if t.strip()]
+        # 获取标签：API取3个 + 标题提炼2个实体，去重合并
+        api_tags = []
+        try:
+            tag_list = await v.get_tags()
+            api_tags = [t.get('tag_name', '') for t in tag_list if t.get('tag_name')][:3]
+        except:
+            api_tags = info.get('dynamic', '').split('#') if info.get('dynamic') else []
+            api_tags = [t.strip() for t in api_tags if t.strip()][:3]
+
+        title_tags = self._extract_title_entities(info.get('title', ''))
+
+        # 合并去重（不区分大小写）：标题实体优先
+        seen_lower = set()
+        tags = []
+        for t in title_tags + api_tags:
+            if t.lower() not in seen_lower:
+                seen_lower.add(t.lower())
+                tags.append(t)
 
         # 获取统计数据
         stat = info.get('stat', {})
@@ -342,7 +384,7 @@ class BilibiliClient:
             up_name=up_name,
             up_id=up_id,
             tags=tags,
-            cover_url=info.get('pic', ''),
+            cover_url=info.get('pic', '').replace('http://', 'https://'),
             view_count=stat.get('view', 0),
             like_count=stat.get('like', 0),
             coin_count=stat.get('coin', 0)
@@ -420,6 +462,7 @@ class BilibiliClient:
         获取最佳字幕
 
         优先级: upload > ai > cc
+        中文(zh/ai-zh)优先于其他语言
 
         Args:
             bvid: BV号
@@ -433,35 +476,43 @@ class BilibiliClient:
         if not subtitles:
             return None
 
-        # 按优先级排序
-        priority_map = {
-            "upload": 0,
-            "ai": 1,
-            "cc": 2
-        }
+        # 语言优先级：中文优先
+        def lang_priority(lan):
+            if lan == 'zh': return 0      # 人工中文
+            if lan == 'ai-zh': return 1   # AI中文
+            if lan.startswith('zh'): return 2  # 其他中文
+            if lan == 'en': return 3      # 英文
+            return 4
 
-        preferred_priority = priority_map.get(preferred_type, 1)
+        # 类型优先级：upload > ai > cc
+        def type_priority(sub):
+            if sub.get('is_user_upload', False): return 0
+            if sub.get('is_ai', False): return 1
+            return 2
 
         best_subtitle = None
-        best_priority = float('inf')
+        best_score = float('inf')
 
         for sub in subtitles:
-            sub_type = sub.get('lan', '')
-            sub_type_code = "cc"  # 默认cc
+            lan = sub.get('lan', '')
+            lp = lang_priority(lan)
+            tp = type_priority(sub)
 
+            # 综合评分：语言权重更高
+            score = lp * 10 + tp
+
+            # 如果指定了类型且匹配，加权
+            sub_type_code = "cc"
             if sub.get('is_ai', False):
                 sub_type_code = "ai"
             elif sub.get('is_user_upload', False):
                 sub_type_code = "upload"
 
-            priority = priority_map.get(sub_type_code, 3)
-
-            # 如果用户指定了类型，优先匹配
             if sub_type_code == preferred_type:
-                priority = -1
+                score -= 5  # 匹配首选类型加分
 
-            if priority < best_priority:
-                best_priority = priority
+            if score < best_score:
+                best_score = score
                 best_subtitle = sub
 
         if not best_subtitle:
@@ -481,15 +532,16 @@ class BilibiliClient:
         if not items:
             return None
 
-        # 确定字幕类型
+        # 确定字幕类型（根据 is_ai/is_user_upload 标志，或从语言代码推断）
+        lan = best_subtitle.get('lan', '')
         sub_type = "cc"
-        if best_subtitle.get('is_ai', False):
+        if best_subtitle.get('is_ai', False) or lan.startswith('ai-'):
             sub_type = "ai"
-        elif best_subtitle.get('is_user_upload', False):
+        elif best_subtitle.get('is_user_upload', False) or lan == 'zh':
             sub_type = "upload"
 
         return SubtitleInfo(
-            lang=best_subtitle.get('lan', ''),
+            lang=lan,
             lang_name=best_subtitle.get('lan_doc', ''),
             subtitle_type=sub_type,
             items=items

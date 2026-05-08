@@ -3,7 +3,7 @@ name: bili2obsidian
 description: 提取Bilibili视频字幕并保存到Obsidian知识库
 license: MIT
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   category: media-processing
   type: tool-wrapper
   author: pkulyn
@@ -28,9 +28,9 @@ metadata:
 运行bili2obsidian提取字幕，生成Markdown文档：
 
 ```bash
-cd d:/cc_projects/bili2obsidian && python bili2obsidian.py extract "<URL>"
-cd d:/cc_projects/bili2obsidian && python bili2obsidian.py batch "<收藏夹URL>"
-cd d:/cc_projects/bili2obsidian && python bili2obsidian.py course "<课程URL>"
+cd D:\cc_projects\Agent-Skills\skills\bili2obsidian && python bili2obsidian.py extract "<URL>"
+cd D:\cc_projects\Agent-Skills\skills\bili2obsidian && python bili2obsidian.py batch "<收藏夹URL>"
+cd D:\cc_projects\Agent-Skills\skills\bili2obsidian && python bili2obsidian.py course "<课程URL>"
 ```
 
 ### 步骤2：翻译英文字幕（智能体后处理）

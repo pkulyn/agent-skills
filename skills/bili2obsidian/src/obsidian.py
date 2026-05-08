@@ -46,6 +46,9 @@ class ObsidianManager:
         """
         # 清理文件名中的非法字符
         safe_filename = self._sanitize_filename(filename)
+        # 避免用户传入的文件名已含.md后缀导致双后缀
+        if safe_filename.lower().endswith('.md'):
+            safe_filename = safe_filename[:-3]
         file_path = self.output_path / f"{safe_filename}.md"
 
         # 写入文件

@@ -73,6 +73,11 @@ class Bili2ObsidianConfig:
 
     def get_output_path(self) -> Path:
         """获取完整的输出路径"""
+        if not self.obsidian_vault_path:
+            raise ValueError(
+                "obsidian_vault_path 未配置！请在 config.json 中设置 Obsidian Vault 路径，"
+                "例如: {\"obsidian_vault_path\": \"D:/pkulyn_vault\"}"
+            )
         vault_path = Path(self.obsidian_vault_path)
         output_path = vault_path / self.output_folder
         output_path.mkdir(parents=True, exist_ok=True)

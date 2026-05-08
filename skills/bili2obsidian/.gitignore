@@ -31,3 +31,4 @@ venv.bak/
 *~
 .DS_Store
 config.local.json
+config.json

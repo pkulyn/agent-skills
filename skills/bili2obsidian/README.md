@@ -4,12 +4,12 @@
 
 ## ✨ 功能特点
 
-- 🎥 **多类型字幕提取**：支持AI自动生成字幕、UP主上传字幕、CC字幕三种类型，自动选择最优
+- 🎥 **多类型字幕提取**：支持AI自动生成字幕、UP主上传字幕、CC字幕三种类型，中文优先，自动选择最优
 - 📦 **批量提取**：支持收藏夹和付费课程批量提取，自动去重已提取视频
 - 🌐 **智能体翻译**：英文字幕自动标记，由AI智能体后处理翻译，无需配置翻译API，翻译质量更高
 - 📝 **Obsidian兼容**：生成带有完整YAML Front Matter的Markdown文档，含视频封面，完美融入知识库
-- 📊 **完整元数据**：自动提取视频标题、UP主信息、播放量、点赞数、标签等所有元数据
-- ⏱️ **时间戳支持**：字幕自带时间戳标记，点击可跳转到对应视频位置
+- 📊 **智能标签**：从视频标题提取实体标签 + API标签去重合并，标签更精准
+- 🔤 **自动标点**：AI字幕原始数据无标点，自动添加中文逗号和句号，智能分段，阅读更流畅
 - 🔒 **安全配置**：支持本地配置文件存储B站凭证，不会泄露隐私
 - 📂 **规范命名**：自动使用`UP主：视频标题`格式命名文件，便于知识库管理
 
@@ -105,43 +105,43 @@ python bili2obsidian.py course "ss6838"
 文件内容结构：
 ```markdown
 ---
-title: "性格扭扭捏捏的人都有一个特质，社恐不会聊天接话必看"
-bvid: "BV1YxckzbEaT"
-avid: 11234567
-up: "姜Dora在此"
-up_id: 12345678
-date: "2026-04-20"
-duration: 685
-views: 123456
-likes: 23456
-coins: 12345
-tags: ["社恐", "沟通技巧", "职场"]
-url: "https://www.bilibili.com/video/BV1YxckzbEaT"
-cover: "https://i0.hdslb.com/bfs/archive/xxx.jpg"
-subtitle_lang: "zh"
-subtitle_lang_name: "中文"
-subtitle_type: "ai"
-subtitle_count: 433
-category: "Bilibili字幕"
+title: "ChatGPT/Codex接码最新教程分享，3分钟解决！"
+source: "https://www.bilibili.com/video/BV1Us9fBUEjR"
+bvid: "BV1Us9fBUEjR"
+avid: 116510517431474
+up: "AI_小波"
+up_id: 14836418
+date: "2026-05-03"
+duration: 153
+views: 14122
+likes: 246
+coins: 131
+subtitle_type: "中文（AI自动生成）"
+subtitle_count: 83
+tags:
+  - ChatGPT
+  - Codex
+  - 知识分享官
+  - 教程
 ---
 
-![性格扭扭捏捏的人都有一个特质...](https://i0.hdslb.com/bfs/archive/xxx.jpg)
+![视频封面](https://i2.hdslb.com/bfs/archive/xxx.jpg)
 
-# 性格扭扭捏捏的人都有一个特质，社恐不会聊天接话必看
+# ChatGPT/Codex接码最新教程分享，3分钟解决！
 
-👤 UP主：[姜Dora在此](https://space.bilibili.com/12345678)
-🔗 视频链接：[点击观看](https://www.bilibili.com/video/BV1YxckzbEaT)
-📝 简介：本期视频和大家聊聊社恐人群的沟通技巧...
+> **来源**: [B站视频](https://www.bilibili.com/video/BV1Us9fBUEjR) | **UP主**: AI_小波 | **字幕类型**: 中文（AI自动生成） | **提取日期**: 2026-05-03
 
-## 字幕
-
-[00:00] 哈喽大家好，欢迎来到我的频道
-[00:03] 今天我们来聊一个很多人都关心的话题...
-[00:07] 性格扭扭捏捏的人其实都有一个共同特质...
+📝 简介：简单的教程分享，文档在置顶评论。
 
 ---
 
-*生成时间: 2026-04-22 14:30:00*
+最近OpenAI的风控又升级了，现在登录codex都需要解码了，而且国内号码呢也是用不了的，所以说今天小布来，来分享一个极其简单的解码教程，让你3分钟就能搞定，有几点需要注意，第一个就是解码，它是不支持虚拟号码的，第二个，如果你是在近期新注册的GPT账号。
+
+再去登录go test，这边是必定会触发这个解码认证的，那么接下来小波就以codex解码为例子...
+
+---
+
+*生成时间: 2026-05-08 16:07:14*
 ```
 
 ### 英文字幕翻译（智能体后处理）
@@ -209,6 +209,16 @@ MIT License - 详见LICENSE文件
 欢迎提交Issue和Pull Request！如果有功能建议或问题反馈，请随时提出。
 
 ## 📅 更新日志
+
+### v1.2.0 (2026-05-08)
+- ✅ AI字幕自动添加中文标点（逗号连接片段，句号结束段落），阅读更自然流畅
+- ✅ 智能分段：基于时间间隔 + 字符数双重规则，AI字幕不再合并为一大段
+- ✅ 智能标签：从视频标题提取英文实体标签（如ChatGPT、Codex），与API标签去重合并，不区分大小写
+- ✅ 字幕选择优化：中文优先级最高（zh > ai-zh > en），综合语言+类型评分选择最佳字幕
+- ✅ 封面URL修复：B站API返回http协议，自动替换为https
+- ✅ 文件名双重后缀修复：避免生成`.md.md`文件
+- ✅ 未配置Vault路径时给出明确错误提示
+- ✅ Markdown格式重构：视频信息改为引用块格式，去除冗余字段，字幕不再使用`## 字幕`标题
 
 ### v1.1.0 (2026-04-22)
 - ✅ 翻译方案重构：移除deep-translator依赖，改为AI智能体后处理翻译
