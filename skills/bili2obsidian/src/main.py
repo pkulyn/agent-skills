@@ -274,8 +274,8 @@ class Bili2Obsidian:
         Returns:
             处理结果统计，包含需要翻译的文件列表
         """
-        # 1. 提取课程ID
-        ss_id = self.bili_client.extract_course_id(course_url_or_id)
+        # 1. 解析课程ID（支持SS号和EP号）
+        ss_id = await self.bili_client.resolve_season_id(course_url_or_id)
         if not ss_id:
             raise ValueError(f"无法从输入中提取课程ID: {course_url_or_id}")
 

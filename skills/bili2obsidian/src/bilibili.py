@@ -156,37 +156,71 @@ class BilibiliClient:
         return None
 
     @staticmethod
-    def extract_course_id(url: str) -> Optional[int]:
+    def extract_course_id(url: str) -> Optional[tuple]:
         """
-        从课程URL中提取SS号
+        从课程URL中提取ID
 
         Args:
-            url: B站课程URL或直接输入的SS号
+            url: B站课程URL或直接输入的SS/EP号
 
         Returns:
-            课程ID（SS号）或None
+            (type, id) 元组，type为'ss'或'ep'，或None
         """
-        # 如果是纯数字，直接返回
+        # 如果是纯数字，当作SS号
         if url.isdigit():
-            return int(url)
+            return ('ss', int(url))
 
         # 匹配ss开头的ID格式
         ss_match = re.search(r'ss(\d+)', url, re.IGNORECASE)
         if ss_match:
-            return int(ss_match.group(1))
+            return ('ss', int(ss_match.group(1)))
 
         # 从cheese链接中提取
         patterns = [
-            r'cheese/play/ss(\d+)',  # 匹配 /cheese/play/ss1234 格式
-            r'cheese/ep(\d+)',  # 匹配 /cheese/ep1234 格式（单集页面）
+            (r'cheese/play/ss(\d+)', 'ss'),
+            (r'cheese/play/ep(\d+)', 'ep'),
+            (r'cheese/ep(\d+)', 'ep'),
         ]
 
-        for pattern in patterns:
+        for pattern, id_type in patterns:
             match = re.search(pattern, url)
             if match:
-                return int(match.group(1))
+                return (id_type, int(match.group(1)))
 
         return None
+
+    async def resolve_season_id(self, course_url_or_id: str) -> Optional[int]:
+        """
+        从课程URL或ID中解析出SS号（赛季/课程ID）
+
+        Args:
+            course_url_or_id: 课程URL、SS号或EP号
+
+        Returns:
+            SS号或None
+        """
+        result = self.extract_course_id(course_url_or_id)
+        if not result:
+            return None
+
+        id_type, id_value = result
+        if id_type == 'ss':
+            return id_value
+
+        # EP号需要通过API获取对应的SS号
+        try:
+            ep = cheese.CheeseVideo(epid=id_value, credential=self.credential)
+            course_list = await ep.get_cheese()
+            season_id = await course_list.get_season_id()
+            if season_id:
+                print(f"EP{id_value} 属于课程 SS{season_id}")
+                return season_id
+            else:
+                print(f"警告: 无法从EP{id_value}获取课程ID，尝试直接使用EP号")
+                return id_value
+        except Exception as e:
+            print(f"解析EP号失败: {e}，尝试直接使用EP号作为课程ID")
+            return id_value
 
     async def get_course_videos(self, ss_id: int) -> List[Dict[str, Any]]:
         """
