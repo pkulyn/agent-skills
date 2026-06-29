@@ -17,11 +17,3 @@ Thumbs.db
 
 # Skill local configs
 config.local.json
-
-# my-design: project deliverables (large, not part of the skill itself)
-skills/my-design/projects/
-
-# my-design: employer-specific brand shell scripts/docs (not for public release)
-skills/my-design/scripts/efund_wrapper.py
-skills/my-design/scripts/html2pptx_native.py
-skills/my-design/references/brand-shell.md
