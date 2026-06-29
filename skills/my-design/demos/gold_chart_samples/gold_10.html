@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Gold Chart - 10 Johnston/Markwick极简编辑</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#E0E0E0}
+body{display:flex;align-items:center;justify-content:center;font-family:'Playfair Display','Noto Serif SC',serif;color:#1A1A1A}
+#dw{width:1920px;height:1080px;position:relative;transform-origin:center center}
+.s{width:1920px;height:1080px;position:absolute;top:0;left:0;background:#FFFFFF;display:none;overflow:hidden;padding:80px 100px}
+.s.on{display:flex}
+#pi{position:fixed;bottom:24px;right:40px;font-family:'Playfair Display','Noto Serif SC',serif;font-size:16px;color:#8C8C8C;z-index:100;opacity:.7}
+</style>
+</head>
+<body>
+<div id="dw">
+<section class="s on" style="flex-direction:column;justify-content:center">
+      <div style="font-size:52px;font-weight:700;font-family:'Playfair Display','Noto Serif SC',serif;color:#1A1A1A;line-height:1.15;margin-bottom:24px">过去十年黄金价格</div>
+      <div style="width:80px;height:3px;background:#8C8C8C;margin-bottom:24px;border-radius:2px"></div>
+      <div style="font-size:20px;font-family:'Georgia','Noto Serif SC',serif;color:#8C8C8C;line-height:1.7">2015–2025 年均价格（美元/盎司）</div>
+    </section>
+<section class="s" style="flex-direction:column">
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:8px">
+        <div style="font-size:36px;font-weight:700;font-family:'Playfair Display','Noto Serif SC',serif;color:#1A1A1A">黄金价格走势</div>
+        <div style="font-size:16px;font-family:'Georgia','Noto Serif SC',serif;color:#8C8C8C">2015–2025 年均价格（美元/盎司）</div>
+      </div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 1680 840" style="width:100%;height:100%"><line x1="100" y1="760" x2="1620" y2="760" stroke="rgba(26,26,26,0.05)" stroke-width="0.5" stroke-dasharray="4,4"/><text x="90" y="764" text-anchor="end" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">1000</text><line x1="100" y1="585" x2="1620" y2="585" stroke="rgba(26,26,26,0.05)" stroke-width="0.5" stroke-dasharray="4,4"/><text x="90" y="589" text-anchor="end" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">1500</text><line x1="100" y1="410" x2="1620" y2="410" stroke="rgba(26,26,26,0.05)" stroke-width="0.5" stroke-dasharray="4,4"/><text x="90" y="414" text-anchor="end" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2000</text><line x1="100" y1="235" x2="1620" y2="235" stroke="rgba(26,26,26,0.05)" stroke-width="0.5" stroke-dasharray="4,4"/><text x="90" y="239" text-anchor="end" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2500</text><line x1="100" y1="60" x2="1620" y2="60" stroke="rgba(26,26,26,0.05)" stroke-width="0.5" stroke-dasharray="4,4"/><text x="90" y="64" text-anchor="end" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">3000</text><rect x="100" y="704" width="124" height="56" fill="#1A1A1A" rx="0"/><text x="162" y="696" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$1160</text><text x="162" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2015</text><rect x="240" y="672" width="124" height="88" fill="#1A1A1A" rx="0"/><text x="301" y="664" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$1251</text><text x="301" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2016</text><rect x="379" y="670" width="124" height="90" fill="#1A1A1A" rx="0"/><text x="441" y="662" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$1257</text><text x="441" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2017</text><rect x="519" y="666" width="124" height="94" fill="#1A1A1A" rx="0"/><text x="581" y="658" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$1269</text><text x="581" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2018</text><rect x="659" y="622" width="124" height="138" fill="#1A1A1A" rx="0"/><text x="720" y="614" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$1393</text><text x="720" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2019</text><rect x="798" y="490" width="124" height="270" fill="#1A1A1A" rx="0"/><text x="860" y="482" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$1770</text><text x="860" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2020</text><rect x="938" y="480" width="124" height="280" fill="#1A1A1A" rx="0"/><text x="1000" y="472" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$1799</text><text x="1000" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2021</text><rect x="1077" y="480" width="124" height="280" fill="#1A1A1A" rx="0"/><text x="1139" y="472" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$1800</text><text x="1139" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2022</text><rect x="1217" y="431" width="124" height="329" fill="#1A1A1A" rx="0"/><text x="1279" y="423" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$1940</text><text x="1279" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2023</text><rect x="1357" y="275" width="124" height="485" fill="#8C8C8C" rx="0"/><text x="1419" y="267" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$2386</text><text x="1419" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2024</text><rect x="1496" y="112" width="124" height="648" fill="#8C8C8C" rx="0"/><text x="1558" y="104" text-anchor="middle" fill="#1A1A1A" font-size="13" font-weight="600" font-family="'Playfair Display','Noto Serif SC',serif">$2850</text><text x="1558" y="784" text-anchor="middle" fill="#8C8C8C" font-size="13" font-family="'Georgia','Noto Serif SC',serif">2025</text></svg>
+      </div>
+      <div style="display:flex;gap:24px;font-size:13px;color:#8C8C8C;font-family:'Georgia','Noto Serif SC',serif">
+        <span>数据来源：World Gold Council / LBMA</span>
+        <span>2025年为Q1均值估算</span>
+      </div>
+    </section>
+<section class="s" style="flex-direction:column;justify-content:center">
+      <div style="font-size:14px;font-family:'Playfair Display','Noto Serif SC',serif;color:#8C8C8C;letter-spacing:1.5px;margin-bottom:24px">关键发现</div>
+      <div style="font-size:56px;font-weight:700;font-family:'Playfair Display','Noto Serif SC',serif;color:#1A1A1A;line-height:1.2;margin-bottom:40px">10年涨幅<br/><span style="color:#8C8C8C">+146%</span></div>
+      <div style="font-size:20px;font-family:'Georgia','Noto Serif SC',serif;color:#8C8C8C;line-height:1.8;max-width:600px">
+        从2015年的$1,160到2025年的$2,850，黄金价格在过去十年持续攀升。<br/>
+        2020年突破$1,700，2024年加速至$2,386。
+      </div>
+      <div style="width:60px;height:3px;background:#8C8C8C;margin-top:40px;border-radius:2px"></div>
+    </section>
+<section class="s" style="flex-direction:column;align-items:center;justify-content:center;text-align:center">
+      <div style="font-size:64px;font-weight:700;font-family:'Playfair Display','Noto Serif SC',serif;color:#1A1A1A;line-height:1.15;margin-bottom:32px">STYLE 10</div>
+      <div style="width:300px;height:3px;border-radius:2px;background:#8C8C8C;margin-bottom:24px"></div>
+      <div style="font-size:22px;color:#8C8C8C;font-family:'Georgia','Noto Serif SC',serif;line-height:1.6">10 Johnston/Markwick极简编辑</div>
+    </section>
+</div>
+<div id="pi">1/4</div>
+<script>
+let cur=0;const slides=document.querySelectorAll('.s');const total=slides.length;
+function show(i){slides.forEach(s=>s.classList.remove('on'));if(slides[i])slides[i].classList.add('on');document.getElementById('pi').textContent=(i+1)+'/'+total}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){cur=(cur+1)%total;show(cur)}else if(e.key==='ArrowLeft'){cur=(cur-1+total)%total;show(cur)}});
+</script>
+</body></html>

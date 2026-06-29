@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-04-26T02:52:31.263338",
+  "updated": "2026-06-29T00:00:00.000000",
   "skills": {
     "bili2obsidian": {
       "name": "bili2obsidian",
@@ -57,6 +57,20 @@
         "tags": []
       },
       "files": 5
+    },
+    "my-design": {
+      "name": "my-design",
+      "description": "打字，回车，一份能交付的设计。支持PPT幻灯片、交互原型、动画Demo、网页/信息图。含20+设计流派参考库、反AI slop规范、Design System约束。",
+      "directory": "my-design",
+      "license": "MIT",
+      "metadata": {
+        "version": "1.0.0",
+        "category": "design",
+        "type": "code-generator",
+        "author": "pkulyn",
+        "tags": []
+      },
+      "files": 181
     }
   }
 }

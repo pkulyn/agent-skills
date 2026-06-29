@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw PPT 指南</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #000000;
+    --fg: #F5F5F7;
+    --muted: #86868B;
+    --accent: #2997FF;
+    --font: -apple-system, 'SF Pro Display', 'Segoe UI', 'Noto Sans SC', sans-serif;
+  }
+
+  body {
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: var(--font);
+    overflow: hidden;
+  }
+
+  .deck-container {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    transform-origin: top left;
+  }
+
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    background: var(--bg);
+    color: var(--fg);
+    position: absolute;
+    top: 0; left: 0;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .slide.active { display: flex; opacity: 1; }
+
+  /* ── Slide 1: Cover ── */
+  .slide-1 {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .slide-1 .eyebrow {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .slide-1 h1 {
+    font-size: 96px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .slide-1 h1 .accent { color: var(--accent); }
+  .slide-1 .subtitle {
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 900px;
+    line-height: 1.4;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  /* ── Slide 2: Content ── */
+  .slide-2 {
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 180px;
+  }
+  .slide-2 .section-label {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+  .slide-2 h2 {
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 60px;
+    max-width: 1100px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.3s forwards;
+  }
+  .slide-2 .points {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 1000px;
+  }
+  .slide-2 .point {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    opacity: 0;
+    animation: fadeUp 0.6s forwards;
+  }
+  .slide-2 .point:nth-child(1) { animation-delay: 0.5s; }
+  .slide-2 .point:nth-child(2) { animation-delay: 0.65s; }
+  .slide-2 .point:nth-child(3) { animation-delay: 0.8s; }
+  .slide-2 .point .num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 48px;
+    flex-shrink: 0;
+  }
+  .slide-2 .point .text {
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--fg);
+    line-height: 1.45;
+  }
+  .slide-2 .point .text strong {
+    font-weight: 600;
+    color: var(--fg);
+  }
+
+  /* ── Navigation ── */
+  .nav {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+    background: rgba(30,30,30,0.8);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 10px 24px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav button {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.2s;
+    font-family: var(--font);
+  }
+  .nav button:hover { color: var(--fg); }
+  .nav .page-info {
+    font-size: 14px;
+    color: var(--muted);
+    min-width: 60px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Keyframes ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Letterbox ── */
+  .letterbox-top, .letterbox-bottom {
+    position: fixed; left: 0; right: 0;
+    background: #000; z-index: 50;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck-container" id="deck">
+
+  <!-- Slide 1: Cover -->
+  <div class="slide slide-1 active" data-screen-label="01 Cover">
+    <div class="eyebrow">OpenClaw Skill · my-design</div>
+    <h1>如何用好<br><span class="accent">OpenClaw</span> 的 PPT</h1>
+    <div class="subtitle">打字，回车，一份能演讲的演示文稿</div>
+  </div>
+
+  <!-- Slide 2: Core Workflow -->
+  <div class="slide slide-2" data-screen-label="02 核心工作流">
+    <div class="section-label">核心工作流</div>
+    <h2>三步，从想法到交付</h2>
+    <div class="points">
+      <div class="point">
+        <span class="num">01</span>
+        <span class="text"><strong>选风格，定 grammar</strong> — 描述你的场景，我推荐 3 个差异化方向。你选一个，我做 2 页 showcase 确认视觉基调。</span>
+      </div>
+      <div class="point">
+        <span class="num">02</span>
+        <span class="text"><strong>说内容，批量生产</strong> — 给我大纲、文档、或口述要点。我按 grammar 推全部页面，每页一个核心信息。</span>
+      </div>
+      <div class="point">
+        <span class="num">03</span>
+        <span class="text"><strong>要什么格式，拿什么格式</strong> — HTML 预览 / PPTX 编辑 / PDF 存档 / 品牌套壳，四选或全要。</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button id="prevBtn" onclick="prevSlide()">←</button>
+  <span class="page-info" id="pageInfo">1 / 2</span>
+  <button id="nextBtn" onclick="nextSlide()">→</button>
+</div>
+
+<script>
+  // Auto-scale
+  function scaleDeck() {
+    const d = document.getElementById('deck');
+    const sx = window.innerWidth / 1920;
+    const sy = window.innerHeight / 1080;
+    const s = Math.min(sx, sy);
+    d.style.transform = `scale(${s})`;
+    d.style.marginLeft = ((window.innerWidth - 1920 * s) / 2) + 'px';
+    d.style.marginTop = ((window.innerHeight - 1080 * s) / 2) + 'px';
+  }
+  window.addEventListener('resize', scaleDeck);
+  scaleDeck();
+
+  // Slide navigation
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  function showSlide(n) {
+    slides.forEach((s, i) => {
+      s.classList.remove('active');
+      if (i === n) {
+        s.classList.add('active');
+        // Reset animations
+        s.querySelectorAll('[style*="animation"]').forEach(el => {
+          el.style.animation = 'none';
+          el.offsetHeight; // reflow
+          el.style.animation = '';
+        });
+      }
+    });
+    current = n;
+    document.getElementById('pageInfo').textContent = `${n + 1} / ${total}`;
+    localStorage.setItem('deck_current', n);
+  }
+
+  function nextSlide() { if (current < total - 1) showSlide(current + 1); }
+  function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  });
+
+  // Restore position
+  const saved = parseInt(localStorage.getItem('deck_current'));
+  if (!isNaN(saved) && saved >= 0 && saved < total) showSlide(saved);
+
+  // Ready signal for recording
+  window.__ready = true;
+</script>
+
+</body>
+</html>

@@ -1,12 +1,12 @@
 {
   "name": "pkulyn-skills",
-  "description": "pkulyn's Claude Code skills: Bilibili subtitle extraction, Agent config generation, government document drafting, and knowledge base management",
-  "version": "1.0.0",
+  "description": "pkulyn's Claude Code skills: Bilibili subtitle extraction, Agent config generation, government document drafting, knowledge base management, and AI-assisted design",
+  "version": "1.1.0",
   "author": {
     "name": "pkulyn"
   },
   "homepage": "https://github.com/pkulyn/agent-skills",
   "repository": "https://github.com/pkulyn/agent-skills",
   "license": "MIT",
-  "keywords": ["skills", "bilibili", "obsidian", "agent", "writing", "knowledge", "wiki", "government"]
+  "keywords": ["skills", "bilibili", "obsidian", "agent", "writing", "knowledge", "wiki", "government", "design", "ui", "ppt"]
 }

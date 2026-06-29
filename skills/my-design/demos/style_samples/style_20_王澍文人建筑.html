@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Style 20 - 王澍文人建筑</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#C8B898}
+body{display:flex;align-items:center;justify-content:center;font-family:'FangSong','KaiTi',serif;color:#3D2B1F}
+#dw{width:1920px;height:1080px;position:relative;transform-origin:center center}
+.s{width:1920px;height:1080px;position:absolute;top:0;left:0;background:#E8DCC8;display:none;overflow:hidden;padding:80px 100px}
+.s.on{display:flex}
+.c{background:#E2D5BF;border:1px solid rgba(61,43,31,0.1);border-radius:0px;padding:36px 32px;position:relative;overflow:hidden;box-shadow:none}
+</style>
+</head>
+<body>
+<div id="dw">
+<section class="s on" style="flex-direction:column;justify-content:center;position:relative">
+      <div style="font-size:48px;font-weight:400;font-family:'FangSong','KaiTi',serif;color:#3D2B1F;line-height:1.5;margin-bottom:32px;letter-spacing:4px">如何用好 OpenClaw 的 PPT</div>
+      <div style="font-size:18px;font-family:'KaiTi',serif;color:#6B5D4F;line-height:2">打字，回车，一份能交付的设计</div>
+      <div style="position:absolute;bottom:80px;right:100px;width:56px;height:56px;border:3px solid #8B4513;display:flex;align-items:center;justify-content:center;font-family:'FangSong','KaiTi',serif;color:#8B4513;font-size:18px;font-weight:700">印</div>
+    </section>
+<section class="s" style="flex-direction:column">
+      <div style="display:inline-block;font-size:14px;font-weight:600;color:#8B4513;letter-spacing:1.5px;margin-bottom:16px;text-transform:uppercase">东方哲学派</div>
+      <div style="font-size:46px;font-weight:700;font-family:'FangSong','KaiTi',serif;color:#3D2B1F;line-height:1.15">核心工作流</div>
+      <div style="display:flex;gap:28px;flex:1;margin-top:48px;align-items:stretch">
+        
+        <div class="c" style="flex:1;display:flex;flex-direction:column">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#8B4513"></div>
+          <div style="font-size:32px;margin-bottom:16px;color:#8B4513">◈</div>
+          <div style="font-size:22px;font-weight:700;font-family:'FangSong','KaiTi',serif;color:#3D2B1F;margin-bottom:12px">选风格，定 Grammar</div>
+          <div style="font-size:16px;color:#6B5D4F;line-height:1.6;font-family:'KaiTi',serif">描述你的场景，我推荐差异化方向</div>
+          <div style="position:absolute;bottom:8px;right:16px;font-size:72px;font-weight:700;opacity:.04;color:#3D2B1F;font-family:'FangSong','KaiTi',serif">01</div>
+        </div>
+        <div class="c" style="flex:1;display:flex;flex-direction:column">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#8B4513"></div>
+          <div style="font-size:32px;margin-bottom:16px;color:#8B4513">◈</div>
+          <div style="font-size:22px;font-weight:700;font-family:'FangSong','KaiTi',serif;color:#3D2B1F;margin-bottom:12px">说内容，批量生产</div>
+          <div style="font-size:16px;color:#6B5D4F;line-height:1.6;font-family:'KaiTi',serif">大纲、文档、口述要点都行</div>
+          <div style="position:absolute;bottom:8px;right:16px;font-size:72px;font-weight:700;opacity:.04;color:#3D2B1F;font-family:'FangSong','KaiTi',serif">02</div>
+        </div>
+        <div class="c" style="flex:1;display:flex;flex-direction:column">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#8B4513"></div>
+          <div style="font-size:32px;margin-bottom:16px;color:#8B4513">◈</div>
+          <div style="font-size:22px;font-weight:700;font-family:'FangSong','KaiTi',serif;color:#3D2B1F;margin-bottom:12px">交付与迭代</div>
+          <div style="font-size:16px;color:#6B5D4F;line-height:1.6;font-family:'KaiTi',serif">HTML预览 + PPTX导出 + 品牌套壳</div>
+          <div style="position:absolute;bottom:8px;right:16px;font-size:72px;font-weight:700;opacity:.04;color:#3D2B1F;font-family:'FangSong','KaiTi',serif">03</div>
+        </div>
+      </div>
+    </section>
+<section class="s" style="flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative">
+      <div style="font-size:82px;font-weight:700;font-family:'FangSong','KaiTi',serif;color:#3D2B1F;line-height:1.15;margin-bottom:32px">开始你的第一份设计</div>
+      <div style="font-size:24px;color:#6B5D4F;font-family:'KaiTi',serif;line-height:1.6;max-width:600px;margin-bottom:60px">打字，回车，交付。</div>
+      <div style="width:300px;height:3px;border-radius:2px;background:#8B4513;margin-bottom:24px"></div>
+      <div style="font-size:15px;color:#6B5D4F;font-family:'FangSong','KaiTi',serif;letter-spacing:2px">STYLE 20 · 王澍文人建筑</div>
+    </section>
+</div>
+<div id="pi">1/3</div>
+
+<script>
+let cur=0;const slides=document.querySelectorAll('.s');const total=slides.length;
+function show(i){slides.forEach(s=>s.classList.remove('on'));if(slides[i])slides[i].classList.add('on');document.getElementById('pi').textContent=(i+1)+'/'+total}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){cur=(cur+1)%total;show(cur)}else if(e.key==='ArrowLeft'){cur=(cur-1+total)%total;show(cur)}});
+</script>
+</body></html>
